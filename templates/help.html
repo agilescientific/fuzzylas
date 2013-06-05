@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>fuzzyLAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script>  
+      $(document).ready(function() {
+      $('.dropdown-toggle').dropdown();
+      });
+    </script>
+</head>
+
+<body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+<!-- Not needed
+          <a class="brand" href="/">fuzzyLAS</a>
+-->
+          {% include "/parts/navbar.html" %}
+        </div>
+      </div>
+    </div>
+
+  <div class="container">
+      
+      <div class="hero-unit">
+        <h3>How to use the web API</h3>
+		<p>Example: <a href="http://fuzzylas.appspot.com/lookup?mnemonic=TEST&method=simple">http://fuzzylas.appspot.com/lookup?mnemonic=TEST&method=simple</a></p>
+		<ul>
+		  <li><b>mnemonic</b> can be any string; it will be converted to uppercase so it is case insensitive.</li>
+		  <li><b>method</b> can be <em>exact</em> (only returns if exact match found), <em>simple</em> (a plain Levenshtein distance implementation), or <em>fuzzy</em> (default, a more sensitive fuzzy search).</li>
+		  <li><b>format</b> can be <em>json</em>, <em>csv</em>, or <em>list</em> (default — comes back as a Python list).</li>
+		  <li><b>guesses</b> should be set to the integer number of guesses you want, default 1. No maximum. The guesses are rather arbitrary with the simple method (because it uses a coarse measure of similarity), so you should probably stick to the default if you want the simple process.</li>
+		</ul>
+	    <p>This web app is not really supposed to be used on its own. The idea is to use it as a service inside other applications, e.g. a log curve manager, or a mobile phone lookup app.</p>
+      </div>
+   
+      <footer>
+        <div style="float:right">
+          <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
+alt="Powered by Google App Engine" />
+        </div>
+        <p><a href="http://www.agilegeoscience.com/">Agile Geoscience 2012</a></p>
+      </footer>
+  
+  </div> <!-- end container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+
+</body>
+</html>

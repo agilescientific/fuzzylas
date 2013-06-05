@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>fuzzyLAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script>  
+      $(document).ready(function() {
+      $('.dropdown-toggle').dropdown();
+      });
+    </script>
+</head>
+
+<body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+<!-- Not needed
+          <a class="brand" href="/">fuzzyLAS</a>
+-->
+          {% include "/parts/navbar.html" %}
+        </div>
+      </div>
+    </div>
+
+  <div class="container">
+      
+      <div class="hero-unit">
+        <div class="alert">
+<!-- 
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+ -->
+          <strong>Warning!</strong> This web app is in early development. There are bugs and the data is old and rough.
+        </div>
+        <h3>What is fuzzyLAS?</h3>
+          <p><strong>What?</strong> This web application does a fuzzy lookup of wireline log mnemonics. Given any string, it returns the best guess from its database.</p>
+          <p><strong>Whence?</strong> The database was compiled and curated from the resources on <a href="http://www.spwla.org/technical/mnemonic-listings">the SPWLA's website</a>.</p>
+          <p><strong>How?</strong> There are two ways to use the app: go to <a href="/">the home page</a> and use the form; or <a href="/lookup">use the web API</a>.</p>
+          <p><strong>Why?</strong> The app is an experiment to see if we could improve on existing curve search, especially providing a machine-readable output, and to help us <a href="http://www.agilegeoscience.com/journal/2011/9/28/learn-to-program.html">learn to program</a>.</p>
+      </div>
+      
+      <div class="accordion" id="accordion" style="font-size:9pt">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          <strong>Credits</strong>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+        <div class="accordion-inner">
+        <p>Built by <a href="http://www.twitter.com/kwinkunks">@kwinkunks</a> and <a href="http://www.twitter.com/EvanBianco">@EvanBianco</a> in December 2012.</p>
+        <p>The data were downloaded, concatenated, and curated from <a href="http://www.spwla.org/technical/mnemonic-listings">the SPWLA's useful cross-company resources</a>.</p>
+        <p>This web app is running on the amazing <a href="https://developers.google.com/appengine/">Google App Engine</a>. </p>
+        <p>Thank you to the following people for inspiration, comments, and testing: Martin<!-- Storey-->, Alexander<!-- Belevich-->, Chris<!-- Jackson-->, Matthew<!-- Lewis-->, and Donatella<!-- Astratti-->.</p>
+      </div>
+      
+    </div>
+  </div>
+   
+      <footer>
+        <div style="float:right">
+          <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" alt="Powered by Google App Engine" />
+        </div>
+        <p><a href="http://www.agilegeoscience.com/">Agile Geoscience 2012</a></p>
+      </footer>
+  
+  </div> <!-- end container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+
+
+</body>
+</html>
