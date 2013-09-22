@@ -12,9 +12,6 @@ handlers:
 - url: /assets
   static_dir: assets
 
-- url: /lookup
-  script: main.app
-
 - url: .*
   script: main.app
 

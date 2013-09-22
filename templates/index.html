@@ -15,7 +15,15 @@
         padding-bottom: 40px;
       }
     </style>
+    
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    
+<!--
+    <style type="text/css">
+      .hero-unit {background: url('../assets/img/background.png') no-repeat;}
+    </style>
+-->
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.js"></script>
     <script src="/assets/js/bootstrap-dropdown.js"></script>
@@ -24,6 +32,7 @@
       $('.dropdown-toggle').dropdown();
       });
     </script>
+    
 </head>
 
 <body>
@@ -47,15 +56,18 @@
 <!-- Subhead
 ================================================== -->
   {% if not result %}
-  <header class="jumbotron subhead" id="overview">
+  <header class="jumbotron" id="overview">
     <div class="container">
+<!-- 
+      <div class="hero-unit" style="background: url('../assets/img/background.png') no-repeat;">
+ -->
       <div class="hero-unit">
       <img src="https://dl.dropbox.com/u/14965965/fuzzyLAS_400px.png" alt="fuzzyLAS" />
 <!-- 
         <h1>fuzzyLAS</h1>
  -->
         <p class="lead">Fuzzy search of wireline log mnemonics</p>
-        </div>
+      </div>
     </div>
   </header>
   {% endif %}
@@ -77,7 +89,7 @@
       <div class="hero-unit">
         <h3>Best guess{% if result.__len__() > 1 %}es{% endif %} for {{input}}</h3>
 		<p>
-		  {% for mnemonic in result %}
+		  {% for mnemonic in order %}
 		    {% for dict in result[mnemonic] %}
 		      <li>{{ mnemonic }} from {{ dict['company'] }}'s {{ dict['model'] }} {{ dict['method'] }} tool — {{ dict['description'] }}{% if dict['units'] %}, {{ dict['units'] }} units{% endif %}{% if dict['company'] == 'Schlumberger' %} <a href="http://www.apps.slb.com/cmd/ChannelItem.aspx?code={{ dict['mnemonic'] }}">(read more at slb.com)</a>{% endif %}</li>
 		    {% endfor %}  
@@ -91,7 +103,7 @@
           <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
 alt="Powered by Google App Engine" />
         </div>
-        <p><a href="http://www.agilegeoscience.com/">Agile Geoscience 2012</a></p>
+        <p><a href="http://www.agilegeoscience.com/">Agile Geoscience 2013</a></p>
       </footer>
   
   </div> <!-- end container-->

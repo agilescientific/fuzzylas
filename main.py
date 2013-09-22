@@ -72,8 +72,8 @@ class MainHandler(Handler):
         
     def post(self):
         input = self.request.get('mnemonic').upper()
-        guess = fuzzylas.guess(curves,input,'simple',1)
-        self.render("index.html", input=input, result=guess )
+        guess = fuzzylas.guess(curves,input,'simple',3)
+        self.render("index.html", input=input, result=guess[0], order=sorted(guess[1],key=guess[1].get))
 
 class AboutHandler(Handler):
     def get(self):
@@ -81,45 +81,52 @@ class AboutHandler(Handler):
         
 class ApiHandler(Handler):
     def get(self):
-    
-        if self.request.arguments() == []:
-            self.render("help.html")
-    
-        else:
-			input   = self.request.get('mnemonic')
+		
+		guess = None
+		
+		if self.request.arguments() == []:
+			self.render("help.html")
+			
+		else:
+			mnemonic = self.request.get('mnemonic')
 			method  = self.request.get('method')
 			format  = self.request.get('format')
 			guesses = self.request.get('guesses')
-			
-			if input:
-				input = input.upper()
+				
+			if mnemonic:
+				mnemonic = mnemonic.upper()
+			else:
+				mnemonic=""
+				
 			if method:
 				method = method.lower()
+			else:
+				method = "simple"
+	
 			if format:
 				format = format.lower()
+	
 			if guesses:
 				guesses = int(guesses)
 			else:
 				guesses = 1        
-			
-			guess = fuzzylas.guess(curves,input,method,guesses)
-			
-			result = [ curves[curve[1]] for curve in sorted(guess,reverse=True) ]
+				
+			guess = fuzzylas.guess(curves,mnemonic,method,guesses)
 				
 			if format == "json":
 				self.response.headers['Content-Type'] = 'application/json'
 				self.response.out.write(json.dumps(guess))
-			
+				
 			elif format == "csv":
 				dump = 'mnemonic,company,method,description,units\n'
-				for g in guess:
-				    for i in guess[g]:
-  					    dump = dump + str(g) + ',' + str(i['company']) + ',' + str(i['method']) + ',' + str(i['description'])+ ',' + str(i['units']) + '\n'
+				for g in sorted(guess[1],key=guess[1].get):
+					for i in guess[0][g]:
+						dump = dump + str(g) + ',' + str(i['company']) + ',' + str(i['method']) + ',' + str(i['description'])+ ',' + str(i['units']) + '\n'
 				self.response.headers['Content-Type'] = 'text/plain'
 				self.response.out.write(dump)
-			
+				
 			else:
-				self.response.out.write(result)
+				self.response.out.write(guess)
 
 
 ##############################
