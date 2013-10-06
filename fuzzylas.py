@@ -1,8 +1,10 @@
 #################################
 # Import stuff
 import levenshtein
+import logging
 import process
 from google.appengine.api import memcache
+from google.appengine.api import search
 
 #################################
 # Pre-populate the memcache
@@ -95,6 +97,28 @@ def guess_fuzzy(data,word,lim):
 
     return output
     
+# def guess_search(word,lim):
+#     
+#     index = search.Index(name='curves')
+#     
+#     query = "{0}".format(word)
+#     #query = "mnemonic = {0}".format(word)
+# 
+#     result = []
+# 
+#     try:
+#         results = index.search(search.Query(
+#             query_string=query,
+#             options=search.QueryOptions(
+#                 limit=lim,
+#                 returned_fields=['mnemonic', 'company', 'units']
+#                 )
+#             ))
+# 
+#         return results
+# 
+#     except search.Error:
+#         logging.exception('Search failed; do something with this error')
     
 #################################
 # Main guess routine - calls one of the others
@@ -106,14 +130,16 @@ def guess(data,word,method,lim):
     
     if guess is None:
 
-		if word in data:
-			return {word: data[word]}
-		elif method == "exact":
-			return None   # we only get this if there's no match
-		elif method == "simple":
-			return guess_simple3(data,word,lim)
-		else:
-			return guess_fuzzy(data,word,lim)
+        if word in data:
+            return {word: data[word]}
+        elif method == "exact":
+            return None   # we only get this if there's no match
+        elif method == "simple":
+            return guess_simple3(data,word,lim)
+#         elif method == "search":
+#             return guess_search(word,lim)
+        else:
+            return guess_fuzzy(data,word,lim)
 
     else:
         return guess
