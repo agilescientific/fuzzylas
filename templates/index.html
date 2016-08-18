@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}fuzzyLAS{% endblock %}
+{% block title %}curvenam.es{% endblock %}
 {% block content %}
 
 
   {% if not result %}
   <header class="jumbotron" id="overview">
     <div class="container">
-      <div class="hero-unit">
-      <img src="https://dl.dropbox.com/u/14965965/fuzzyLAS_400px.png" alt="fuzzyLAS" />
-        <p class="lead">Fuzzy search of wireline log mnemonics</p>
-      </div>
+        <img src="../assets/img/curvenames.png" alt="curvenam.es" />
     </div>
   </header>
   {% endif %}
@@ -30,14 +27,12 @@
       
       {% if result %}
       <div class="hero-unit">
-        <h3>Best guess{% if result.__len__() > 1 %}es{% endif %} for {{input}}</h3>
-		<p>
-		  {% for mnemonic in order %}
-		    {% for dict in result[mnemonic] %}
-		      <li>{{ mnemonic }} from {{ dict['company'] }}'s {{ dict['model'] }} {{ dict['method'] }} tool — {{ dict['description'] }}{% if dict['units'] %}, {{ dict['units'] }} units{% endif %}{% if dict['company'] == 'Schlumberger' %} <a href="http://www.apps.slb.com/cmd/ChannelItem.aspx?code={{ dict['mnemonic'] }}">(read more at slb.com)</a>{% endif %}</li>
-		    {% endfor %}  
-		  {% endfor %}
-		</p>
+        <h3>Best guess{% if mnemonic.__len__() > 1 %}es{% endif %} for {{ mnemonic }}</h3>
+        <p>
+          {% for r in result %}
+              <li>{{ r['mnemonic'] }} from {{ r['curve']['company'] }}'s {{ r['curve']['model'] }} {{ r['curve']['method'] }} tool — {{ r['curve']['description'] }}{% if r['curve']['units'] %}, {{ r['curve']['units'] }} units{% endif %}{% if r['curve']['company'] == 'Schlumberger' %} <a href="http://www.apps.slb.com/cmd/ChannelItem.aspx?code={{ r['mnemonic'] }}">(try to find this curve at slb.com)</a>{% endif %}</li>
+          {% endfor %}
+        </p>
       </div>
       {% endif %}
 

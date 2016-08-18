@@ -9,14 +9,17 @@
 
 ############################
 # Import libraries
-import webapp2
 import json
-import fuzzylas
 import csv
-import jinja2
 import os
+import time
+
+import webapp2
+import jinja2
 # from google.appengine.api import search
 # from google.appengine.ext import db
+
+import fuzzylas
 
 
 def datetimeformat(value, format='%H:%M on %d.%m.%Y'):
@@ -118,13 +121,15 @@ with open(data_file, 'r') as dbfile:
 
 class MainHandler(Handler):
     def get(self):
-        self.render("index.html")
+        self.render("index.html", mnemonic=None, result=None)
 
     def post(self):
-        input = self.request.get('mnemonic').upper()
-        guess = fuzzylas.guess(curves, input, 'simple', 3)
-        self.render("index.html", input=input, result=guess[0],
-                    order=sorted(guess[1], key=guess[1].get))
+        mnemonic = self.request.get('mnemonic').upper()
+        guess = fuzzylas.guess(curves, mnemonic, 'simple', 3)
+        if guess is not None:
+            self.render("index.html", mnemonic=mnemonic, result=guess)
+        else:
+            self.reponse.out.write("Oops, something went wrong.")
 
 
 class AboutHandler(Handler):
@@ -134,52 +139,33 @@ class AboutHandler(Handler):
 
 class ApiHandler(Handler):
     def get(self):
-
+        start_time = time.time()
         guess = None
 
         if self.request.arguments() == []:
             self.render("help.html")
+            return
 
-        else:
-            mnemonic = self.request.get('mnemonic')
-            method = self.request.get('method')
-            format = self.request.get('format')
-            guesses = self.request.get('guesses')
+        mnemonic = self.request.get('mnemonic') or ''
+        method = self.request.get('method') or 'simple'
+        guesses = self.request.get('guesses') or 1
 
-            if mnemonic:
-                mnemonic = mnemonic.upper()
-            else:
-                mnemonic = ""
+        guess = fuzzylas.guess(curves,
+                               mnemonic.upper(),
+                               method.lower(),
+                               guesses)
 
-            if method:
-                method = method.lower()
-            else:
-                method = "simple"
+        response = {
+            "mnemonic": mnemonic,
+            "method": method,
+            "limit": guesses,
+            "time": time.time() - start_time,
+            "result": guess
+        }
 
-            if format:
-                format = format.lower()
-
-            if guesses:
-                guesses = int(guesses)
-            else:
-                guesses = 1
-
-            guess = fuzzylas.guess(curves, mnemonic, method, guesses)
-
-            if format == "json":
-                self.response.headers['Content-Type'] = 'application/json'
-                self.response.out.write(json.dumps(guess))
-
-            elif format == "csv":
-                dump = 'mnemonic,company,method,description,units\n'
-                for g in sorted(guess[1], key=guess[1].get):
-                    for i in guess[0][g]:
-                        dump = dump + str(g) + ',' + str(i['company']) + ',' + str(i['method']) + ',' + str(i['description'])+ ',' + str(i['units']) + '\n'
-                self.response.headers['Content-Type'] = 'text/plain'
-                self.response.out.write(dump)
-
-            else:
-                self.response.out.write(guess)
+        self.response.headers['Content-Type'] = 'application/vnd.api+json'
+        self.response.out.write(json.dumps(response))
+        return
 
 
 ##############################

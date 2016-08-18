@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}fuzzyLAS{% endblock %}
+{% block title %}curvenam.es{% endblock %}
 {% block content %}
 
   <div class="container">
       
       <div class="hero-unit">
         <h3>How to use the web API</h3>
-		<p>Example: <a href="http://fuzzylas.appspot.com/lookup?mnemonic=TEST&method=fuzzy&guesses=5">http://fuzzylas.appspot.com/lookup?mnemonic=TEST&method=fuzzy&guesses=5</a></p>
+		<p>Example: <a href="http://curvenam.es/lookup?mnemonic=TEST&method=fuzzy&guesses=5">http://curvenam.es/lookup?mnemonic=TEST&method=fuzzy&guesses=5</a></p>
 		<ul>
 		  <li><b>mnemonic</b> can be any string; it will be converted to uppercase so it is case insensitive.</li>
 		  <li><b>method</b> can be <em>exact</em> (only returns if exact match found), <em>simple</em> (a plain Levenshtein distance implementation), or <em>fuzzy</em> (default, a more sensitive fuzzy search).</li>
-		  <li><b>format</b> can be <em>json</em>, <em>csv</em>, or <em>list</em> (default — comes back as a Python list).</li>
+		  <li><b>format</b> is always JSON.</li>
 		  <li><b>guesses</b> should be set to the integer number of guesses you want, default 1. No maximum. The guesses are rather arbitrary with the simple method (because it uses a coarse measure of similarity), so you should probably stick to the default if you want the simple process.</li>
 		</ul>
 	    <p>This web app is not really supposed to be used on its own. The idea is to use it as a service inside other applications, e.g. a log curve manager, or a mobile phone lookup app.</p>

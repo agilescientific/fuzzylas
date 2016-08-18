@@ -1,23 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}fuzzyLAS{% endblock %}
+{% block title %}curvenam.es{% endblock %}
 {% block content %}
 
   <div class="container">
       
       <div class="hero-unit">
+
         <div class="alert">
-<!-- 
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
- -->
-          <strong>Warning!</strong> This web app is in early development. There are bugs and the data is old and rough.
+          <strong>Warning!</strong> This web app is experimental. The data is old and rough.
         </div>
-        <h3>What is fuzzyLAS?</h3>
-          <p><strong>What?</strong> This web application does a fuzzy lookup of wireline log mnemonics. Given any string, it returns the best guess from its database.</p>
-          <p><strong>Whence?</strong> The database was compiled and curated from the resources on <a href="http://www.spwla.org/technical/mnemonic-listings">the SPWLA's website</a>.</p>
+        <h3>What is curvenam.es?</h3>
+          <p><strong>What?</strong> This web application does a fuzzy lookup of wireline log mnemonics. Given any string, it returns the best guess(es) from its database. It used to be called <strong>fuzzyLAS</strong> but then we realized that's a horrible name.</p>
+          <p><strong>Whence?</strong> The database was compiled and curated from the resources <a href="http://www.spwla.org/">the SPWLA</a> used to have on its website.</p>
           <p><strong>How?</strong> There are two ways to use the app: go to <a href="/">the home page</a> and use the form; or <a href="/lookup">use the web API</a>.</p>
           <p><strong>Why?</strong> The app is an experiment to see if we could improve on existing curve search, especially providing a machine-readable output, and to help us <a href="http://www.agilegeoscience.com/journal/2011/9/28/learn-to-program.html">learn to program</a>.</p>
-      </div>
       
       <div class="accordion" id="accordion" style="font-size:9pt">
         <div class="accordion-heading">
@@ -26,14 +23,16 @@
           </a>
         </div>
         <div id="collapseOne" class="accordion-body collapse">
-        <div class="accordion-inner">
-        <p>Built by <a href="http://www.twitter.com/kwinkunks">@kwinkunks</a> and <a href="http://www.twitter.com/EvanBianco">@EvanBianco</a> in December 2012.</p>
-        <p>The data were downloaded, concatenated, and curated from <a href="http://www.spwla.org/technical/mnemonic-listings">the SPWLA's useful cross-company resources</a>.</p>
-        <p>This web app is running on the amazing <a href="https://developers.google.com/appengine/">Google App Engine</a>. </p>
-        <p>Thank you to the following people for inspiration, comments, and testing: Martin<!-- Storey-->, Alexander<!-- Belevich-->, Chris<!-- Jackson-->, Matthew<!-- Lewis-->, and Donatella<!-- Astratti-->.</p>
-      </div>
-      
-    </div>
+          <div class="accordion-inner">
+          <p>Built by <a href="http://www.twitter.com/kwinkunks">@kwinkunks</a> and <a href="http://www.twitter.com/EvanBianco">@EvanBianco</a> in December 2012 and fiddled with ever since.</p>
+          <p>The data were downloaded, concatenated, and curated from <a href="http://www.spwla.org/technical/mnemonic-listings">the SPWLA's useful cross-company resources</a>.</p>
+          <p>This web app is running on the amazing <a href="https://developers.google.com/appengine/">Google App Engine</a>. </p>
+          <p>Thank you to the following people for inspiration, comments, and testing: Martin<!-- Storey-->, Alexander<!-- Belevich-->, Chris<!-- Jackson-->, Matthew<!-- Lewis-->, and Donatella<!-- Astratti-->.</p>
+          </div>
+      </div><!-- end of accordion -->
+
+      </div><!-- end of hero unit -->
+
   </div>
    
 {% endblock %}

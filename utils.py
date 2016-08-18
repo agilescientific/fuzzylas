@@ -15,6 +15,25 @@ def asciionly(s):
     return s.translate(None, bad_chars)
 
 
+def flatten_list(l):
+    """
+    Unpacks lists in a list:
+
+        [1, 2, [3, 4], [5, [6, 7]]]
+
+    becomes
+
+        [1, 2, 3, 4, 5, 6, 7]
+
+    http://stackoverflow.com/a/12472564/3381305
+    """
+    if (l == []) or (l is None):
+        return l
+    if isinstance(l[0], list):
+        return flatten_list(l[0]) + flatten_list(l[1:])
+    return l[:1] + flatten_list(l[1:])
+
+
 def asciidammit(s):
     """
     Remove non-ASCII characters from strings.

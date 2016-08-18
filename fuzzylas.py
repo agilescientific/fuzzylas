@@ -6,6 +6,8 @@ import process
 from google.appengine.api import memcache
 # from google.appengine.api import search
 
+from utils import flatten_list
+
 #################################
 # TODO
 # Pre-populate the memcache
@@ -19,75 +21,23 @@ from google.appengine.api import memcache
 
 def guess_simple(data, word, lim):
     """
-    Levenshtein guess.
-    """
-    words = []
-    distances = []
-    smallest = 100
-    for w in data.keys():
-        distance = levenshtein.levenshtein(word, w)
-        if distance <= smallest:
-            words.insert(0, w)
-            distances.insert(0, distance)
-            smallest = distance
-        else:
-            words.append(str(w))
-            distances.append(distance)
-
-    output = {}
-    for i in range(lim):
-        output[words[i]] = data[words[i]]
-        i += 1
-
-    return output
-
-
-def guess_simple2(data, word, lim):
-    """
     Another way to step over dict.
     """
     words = []
-    distances = []
     smallest = 100
-    for w in data:
-        distance = levenshtein.levenshtein(word, w)
-        if distance <= smallest:
-            words.insert(0, w)
-            distances.insert(0, distance)
-            smallest = distance
-        else:
-            words.append(str(w))
-            distances.append(distance)
+    for w, curves in data.items():
+        d = levenshtein.levenshtein2(word, w)
+        if d <= smallest:
+            for c in curves:
+                if not c['mnemonic']: continue
+                result = {"distance": d, "mnemonic": w, "curve": c}
+                words.append(result)
+            smallest = d
+        # else:
+        #     words.append(str(w))
+        #     distances.append(distance)
 
-    output = {}
-    for i in range(lim):
-        output[words[i]] = data[words[i]]
-        i += 1
-
-    return output
-
-
-def guess_simple3(data, word, lim):
-    """
-    Another way to step over dict.
-    """
-    words = []
-    distances = []
-    smallest = 100
-    for w in data:
-        distance = levenshtein.levenshtein2(word, w)
-        if distance <= smallest:
-            words.insert(0, w)
-            distances.insert(0, distance)
-            smallest = distance
-        else:
-            words.append(str(w))
-            distances.append(distance)
-
-    output = {}
-    for i in range(lim):
-        output[words[i]] = data[words[i]]
-        i += 1
+    output = words[:lim:-1]
 
     key = word + '-' + 'simple' + '-' + str(lim)
     memcache.set(key, output)
@@ -101,9 +51,16 @@ def guess_fuzzy(data, word, lim):
     """
     hits = process.extract(word, data.keys(), limit=lim)
 
-    output = {}
-    for hit in hits:
-        output[(hit[1], hit[0])] = data[hit[0]]
+    output = []
+    for w, s in hits:
+        d = levenshtein.levenshtein2(word, w)
+        curves = data[w]
+        for c in curves:
+            result = {"distance": d,
+                      "score": s,
+                      "mnemonic": w,
+                      "curve": c}
+            output.append(result)
 
     key = word + '-' + 'fuzzy' + '-' + str(lim)
     memcache.set(key, output)
@@ -140,21 +97,20 @@ def guess(data, word, method, lim):
     Main guess routine - calls one of the others
     curves dataset, input, method, guesses
     """
+    lim = int(lim)
     key = word + '-' + method + '-' + str(lim)
-    guess = memcache.get(key)
+    g = memcache.get(key)
 
-    if guess is None:
+    if g is None:
 
         if word in data:
             return {word: data[word]}
         elif method == "exact":
-            return None   # we only get this if there's no match
+            return None
         elif method == "simple":
-            return guess_simple3(data, word, lim)
-#         elif method == "search":
-#             return guess_search(word,lim)
+            return guess_simple(data, word, lim)
         else:
             return guess_fuzzy(data, word, lim)
 
     else:
-        return guess
+        return g
