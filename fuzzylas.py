@@ -19,41 +19,45 @@ from utils import flatten_list
 # Various guessing algorithms
 
 
-def guess_simple(data, word, lim):
+def guess_simple(data, word, limit=-1, maxdist=1):
     """
     Another way to step over dict.
+
+    Args:
+        limit (int): the max number of items to return. We don't use it here.
+        maxdist (int): the max allowed edit distance. We only use that.
     """
-    words = []
-    smallest = 100
+    output = []
     for w, curves in data.items():
         d = levenshtein.levenshtein2(word, w)
-        if d <= smallest:
+        if d <= maxdist:
             for c in curves:
                 if not c['mnemonic']: continue
                 result = {"distance": d, "mnemonic": w, "curve": c}
-                words.append(result)
-            smallest = d
-        # else:
-        #     words.append(str(w))
-        #     distances.append(distance)
+                output.append(result)
 
-    output = words[:lim:-1]
 
-    key = word + '-' + 'simple' + '-' + str(lim)
+    key = word + '-' + 'simple' + '-' + str(limit) + str(maxdist)
     memcache.set(key, output)
 
     return output
 
 
-def guess_fuzzy(data, word, lim):
+def guess_fuzzy(data, word, limit=1, maxdist=1):
     """
     Fuzzywuzzy guess
+
+    Args:
+        limit (int): the max number of items to return.
+        maxdist (int): the max allowed edit distance.
     """
-    hits = process.extract(word, data.keys(), limit=lim)
+    hits = process.extract(word, data.keys(), limit=limit)
 
     output = []
     for w, s in hits:
         d = levenshtein.levenshtein2(word, w)
+        if d > maxdist:
+            continue
         curves = data[w]
         for c in curves:
             result = {"distance": d,
@@ -61,8 +65,7 @@ def guess_fuzzy(data, word, lim):
                       "mnemonic": w,
                       "curve": c}
             output.append(result)
-
-    key = word + '-' + 'fuzzy' + '-' + str(lim)
+    key = word + '-' + 'fuzzy' + '-' + str(limit) + str(maxdist)
     memcache.set(key, output)
 
     return output
@@ -92,13 +95,14 @@ def guess_fuzzy(data, word, lim):
 #################################
 
 
-def guess(data, word, method, lim):
+def guess(data, word, method, limit, maxdist):
     """
     Main guess routine - calls one of the others
-    curves dataset, input, method, guesses
+    curves dataset, input, method, limit, maxdist
     """
-    lim = int(lim)
-    key = word + '-' + method + '-' + str(lim)
+    limit = int(limit)
+    maxdist = int(maxdist)
+    key = word + '-' + method + '-' + str(limit)
     g = memcache.get(key)
 
     if g is None:
@@ -108,9 +112,9 @@ def guess(data, word, method, lim):
         elif method == "exact":
             return None
         elif method == "simple":
-            return guess_simple(data, word, lim)
+            return guess_simple(data, word, limit, maxdist)
         else:
-            return guess_fuzzy(data, word, lim)
+            return guess_fuzzy(data, word, limit, maxdist)
 
     else:
         return g

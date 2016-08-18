@@ -125,7 +125,7 @@ class MainHandler(Handler):
 
     def post(self):
         mnemonic = self.request.get('mnemonic').upper()
-        guess = fuzzylas.guess(curves, mnemonic, 'simple', 3)
+        guess = fuzzylas.guess(curves, mnemonic, 'simple', limit=3, maxdist=1)
         if guess is not None:
             self.render("index.html", mnemonic=mnemonic, result=guess)
         else:
@@ -148,17 +148,22 @@ class ApiHandler(Handler):
 
         mnemonic = self.request.get('mnemonic') or ''
         method = self.request.get('method') or 'simple'
-        guesses = self.request.get('guesses') or 1
+        # Keep backward compatible for now and look for guesses parameter
+        limit = self.request.get('guesses') or self.request.get('limit') or 1
+        maxdist = self.request.get('maxdist') or 1
 
         guess = fuzzylas.guess(curves,
                                mnemonic.upper(),
                                method.lower(),
-                               guesses)
+                               limit=limit,
+                               maxdist=maxdist,
+                               )
 
         response = {
             "mnemonic": mnemonic,
             "method": method,
-            "limit": guesses,
+            "limit": limit,
+            "maxdist": maxdist,
             "time": time.time() - start_time,
             "result": guess
         }
